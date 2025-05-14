@@ -1,0 +1,78 @@
+{% extends "base.njk" %}
+
+{% block content %}
+  <h1>{{ excursion.name }}</h1>
+  <div id="map" class="map"></div>
+  
+  {% if excursion.sections %}
+    {% for section in excursion.sections %}
+      {% set sectionPhotoDir = page.fileSlug + '/' + section.name | slug %}
+      {% set sectionPhotos = sectionPhotoDir | listPhotos %}
+      <details>
+        <summary>{{ section.name }}</summary>
+        <p>{{ section.description }}</p>
+        {% if sectionPhotos.length > 0 %}
+          <div class="gallery">
+            {% for photo in sectionPhotos %}
+              <a href="/images/{{ sectionPhotoDir }}/{{ photo }}" data-lightbox="{{ excursion.name | slug }}"><img src="/images/{{ sectionPhotoDir }}/{{ photo }}" alt="{{ section.name }}"></a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p>Brak zdjęć dla sekcji {{ section.name }}.</p>
+        {% endif %}
+        {% if section.subsections %}
+          {% for subsection in section.subsections %}
+            {% set subsectionPhotoDir = sectionPhotoDir + '/' + subsection.name | slug %}
+            {% set subsectionPhotos = subsectionPhotoDir | listPhotos %}
+            <details>
+              <summary>{{ subsection.name }}</summary>
+              <p>{{ subsection.description }}</p>
+              {% if subsectionPhotos.length > 0 %}
+                <div class="gallery">
+                  {% for photo in subsectionPhotos %}
+                    <a href="/images/{{ subsectionPhotoDir }}/{{ photo }}" data-lightbox="{{ excursion.name | slug }}"><img src="/images/{{ subsectionPhotoDir }}/{{ photo }}" alt="{{ subsection.name }}"></a>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <p>Brak zdjęć dla podsekcji {{ subsection.name }}.</p>
+              {% endif %}
+            </details>
+          {% endfor %}
+        {% endif %}
+      </details>
+    {% endfor %}
+  {% else %}
+    <p>Brak sekcji dla tej wycieczki.</p>
+  {% endif %}
+
+  <script>
+    // Inicjalizacja mapy
+    try {
+      var map = L.map('map').setView([{{ excursion.location[0] }}, {{ excursion.location[1] }}], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Dodanie pinesek
+      var locations = [
+        {% for section in excursion.sections %}
+          {% if section.location %}
+            { lat: {{ section.location[0] }}, lon: {{ section.location[1] }}, name: "{{ section.name }}" },
+          {% endif %}
+          {% if section.subsections %}
+            {% for subsection in section.subsections %}
+              {% if subsection.location %}
+                { lat: {{ subsection.location[0] }}, lon: {{ subsection.location[1] }}, name: "{{ subsection.name }}" },
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      ];
+      locations.forEach(function(loc) {
+        L.marker([loc.lat, loc.lon]).addTo(map).bindPopup(loc.name);
+      });
+    } catch (e) {
+      console.error('Błąd podczas inicjalizacji mapy:', e);
+    }
+  </script>
+{% endblock %}

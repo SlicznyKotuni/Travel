@@ -1,0 +1,14 @@
+{% extends "base.njk" %}
+
+{% block content %}
+  <h1>Wycieczki Cybernetyczne</h1>
+  {% if collections.excursions.length > 0 %}
+    <ul>
+      {% for excursion in collections.excursions %}
+        <li><a href="{{ excursion.url }}">{{ excursion.data.excursion.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Brak dostępnych wycieczek.</p>
+  {% endif %}
+{% endblock %}

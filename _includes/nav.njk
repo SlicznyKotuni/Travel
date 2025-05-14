@@ -1,0 +1,8 @@
+<nav>
+  <ul>
+    <li><a href="/" {% if page.url == '/' %}class="active"{% endif %}>Strona główna</a></li>
+    {% for excursion in collections.excursions %}
+      <li><a href="{{ excursion.url }}" {% if page.url == excursion.url %}class="active"{% endif %}>{{ excursion.data.excursion.name }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
