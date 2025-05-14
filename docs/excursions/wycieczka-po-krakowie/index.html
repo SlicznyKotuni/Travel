@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wycieczki Cybernetyczne</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Lightbox CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <nav>
+  <ul>
+    <li><a href="/" >Strona główna</a></li>
+    
+      <li><a href="/excursions/wycieczka-po-krakowie/" class="active">Wycieczka po Krakowie</a></li>
+    
+  </ul>
+</nav>
+  <main>
+    
+  <h1>Wycieczka po Krakowie</h1>
+  <div id="map" class="map"></div>
+  
+  
+    
+      
+      
+      <details>
+        <summary>Stare Miasto</summary>
+        <p>Historyczne centrum Krakowa z wieloma zabytkami.</p>
+        
+          <p>Brak zdjęć dla sekcji Stare Miasto.</p>
+        
+        
+          
+            
+            
+            <details>
+              <summary>Rynek Główny</summary>
+              <p>Największy średniowieczny plac w Europie.</p>
+              
+                <div class="gallery">
+                  
+                    <a href="/images/krakow/stare-miasto/rynek-glowny/rynek1.png" data-lightbox="wycieczka-po-krakowie"><img src="/images/krakow/stare-miasto/rynek-glowny/rynek1.png" alt="Rynek Główny"></a>
+                  
+                </div>
+              
+            </details>
+          
+        
+      </details>
+    
+      
+      
+      <details>
+        <summary>Kazimierz</summary>
+        <p>Dzielnica żydowska z unikalną atmosferą.</p>
+        
+          <p>Brak zdjęć dla sekcji Kazimierz.</p>
+        
+        
+      </details>
+    
+  
+
+  <script>
+    // Inicjalizacja mapy
+    try {
+      var map = L.map('map').setView([50.0647, 19.945], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
+
+      // Dodanie pinesek
+      var locations = [
+        
+          
+            { lat: 50.0614, lon: 19.9366, name: "Stare Miasto" },
+          
+          
+            
+              
+                { lat: 50.0616, lon: 19.9368, name: "Rynek Główny" },
+              
+            
+          
+        
+          
+            { lat: 50.0515, lon: 19.9445, name: "Kazimierz" },
+          
+          
+        
+      ];
+      locations.forEach(function(loc) {
+        L.marker([loc.lat, loc.lon]).addTo(map).bindPopup(loc.name);
+      });
+    } catch (e) {
+      console.error('Błąd podczas inicjalizacji mapy:', e);
+    }
+  </script>
+
+  </main>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Lightbox JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+</body>
+</html>
